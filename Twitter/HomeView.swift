@@ -28,23 +28,23 @@ struct Tweet: Identifiable {
 struct HomeView: View {
     // Örnek Timeline verileri - API bağlayınca direkt burayı API'den doldurulacak
     @State private var tweets: [Tweet] = [
-        Tweet(authorName: "taklali e60", handle: "@spritfk", time: "15h", text: "Deneme 1 2 3 ... uzun uzun tweett spacing deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .gray, replyCount: 120, retweetCount: 40, likeCount: 200, goruntulenmeCount: 234, bookmarkCount: 100),
+        Tweet(authorName: "taklali e60", handle: "@spritfk", time: "15h", text: "eLON mASK anaı zikim ananı", avatarColor: .gray, replyCount: 467, retweetCount: 425, likeCount: 923, goruntulenmeCount: 234, bookmarkCount: 100),
         
-        Tweet(authorName: "redbull fedaisi", handle: "@basat_8", time: "12h", text: "redbull kırmızısı", avatarColor: .red, replyCount: 100, retweetCount: 30, likeCount: 345, goruntulenmeCount: 765, bookmarkCount: 936),
+        Tweet(authorName: "redbull fedaisi", handle: "@basat_8", time: "12h", text: "lol oynuyom gun1", avatarColor: .red, replyCount: 25, retweetCount: 12, likeCount: 532, goruntulenmeCount: 765, bookmarkCount: 936),
         
-        Tweet(authorName: "Akkus", handle: "@AhmetAkkys", time: "20h", text: "deneme2 1 3", avatarColor: .green, replyCount: 200, retweetCount: 100, likeCount: 300, goruntulenmeCount: 755, bookmarkCount: 542),
+        Tweet(authorName: "deniz", handle: "@mopckqw", time: "3h", text: "20 kisi kaldı gelin çabuk", avatarColor: .brown, replyCount: 231, retweetCount: 242, likeCount: 746, goruntulenmeCount: 755, bookmarkCount: 542),
         
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .blue, replyCount: 0, retweetCount: 274, likeCount: 27, goruntulenmeCount: 273, bookmarkCount: 956),
+        Tweet(authorName: "rosa", handle: "@benibisalinyaw_", time: "3m", text: "sonra dedim ki o kim ya abi benim gene çenem düştü ha bak çok saçma konulardan bahsedebilirim", avatarColor: .red, replyCount: 7, retweetCount: 274, likeCount: 27, goruntulenmeCount: 273, bookmarkCount: 956),
         
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .purple, replyCount: 14, retweetCount: 250, likeCount: 924, goruntulenmeCount: 88, bookmarkCount: 956),
+        Tweet(authorName: "melisa", handle: "@kizginliktayim", time: "3h", text: "unbelievable soktayim (dogdugumuzdan beri", avatarColor: .purple, replyCount: 14, retweetCount: 250, likeCount: 924, goruntulenmeCount: 88, bookmarkCount: 956),
         
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .orange, replyCount: 91, retweetCount: 273, likeCount: 836, goruntulenmeCount: 141, bookmarkCount: 956),
+        Tweet(authorName: "Kaira", handle: "@95kayra", time: "44m", text: "ÇİLEK KOKUYORDU", avatarColor: .orange, replyCount: 91, retweetCount: 273, likeCount: 836, goruntulenmeCount: 141, bookmarkCount: 956),
         
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .cyan, replyCount: 24, retweetCount: 82, likeCount: 123, goruntulenmeCount: 84, bookmarkCount: 123),
+        Tweet(authorName: "katherine pierce", handle: "@katherinepier72", time: "14h", text: "baba feneri bana salın demis", avatarColor: .cyan, replyCount: 24, retweetCount: 82, likeCount: 123, goruntulenmeCount: 84, bookmarkCount: 123),
         
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .brown, replyCount: 243, retweetCount: 123, likeCount: 95, goruntulenmeCount: 254, bookmarkCount: 521),
+        Tweet(authorName: "gizlisevdam", handle: "@34_psi", time: "34m", text: "NERDE O ALİ BABNIN ÇİFTLİĞİNDEKİLER", avatarColor: .brown, replyCount: 243, retweetCount: 123, likeCount: 95, goruntulenmeCount: 254, bookmarkCount: 521),
         
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
+        Tweet(authorName: "Tolga", handle: "@Tolga20382408", time: "2h", text: "'Bir bakmışsın Tolga kuyuda zordadır, bir bakmışsın Tolga gtten veriyordur!'", avatarColor: .teal, replyCount: 364, retweetCount: 231, likeCount: 983, goruntulenmeCount: 142, bookmarkCount: 812),
         
         Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .indigo, replyCount: 783, retweetCount: 734, likeCount: 925, goruntulenmeCount: 235, bookmarkCount: 956),
         
@@ -293,3 +293,70 @@ struct TweetActions: View{
 #Preview {
     HomeView()
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
