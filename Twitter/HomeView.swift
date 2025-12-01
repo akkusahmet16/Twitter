@@ -144,23 +144,18 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Circle()
-                        .fill(.blue)
-                        .frame(width:32, height:32)
-                        .overlay(
-                            Image("ahmet")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 90)
-                                .clipShape(Circle())
-                        )
+                    Image("ahmet")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 32, height: 64)
+                        .clipShape(Circle())
                 }
                 
                 ToolbarItem(placement: .principal) {
                     Image("TwitterLogoBlue")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 32, height: 32)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing){
