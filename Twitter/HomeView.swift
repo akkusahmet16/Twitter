@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  HomeView.swift
 //  Twitter
 //
 //  Created by Akkuş on 28.11.2025.
@@ -26,163 +26,158 @@ struct Tweet: Identifiable {
 // MARK: - Ana Ekran (Home Timeline)
 
 struct HomeView: View {
+    @EnvironmentObject var auth: XAuthManager
+    @EnvironmentObject var api: XAPIService
+    @State private var showMenu: Bool = false
     // Örnek Timeline verileri - API bağlayınca direkt burayı API'den doldurulacak
-    @State private var tweets: [Tweet] = [
-        Tweet(authorName: "taklali e60", handle: "@spritfk", time: "15h", text: "eLON mASK anaı zikim ananı", avatarColor: .gray, replyCount: 467, retweetCount: 425, likeCount: 923, goruntulenmeCount: 234, bookmarkCount: 100),
-        
-        Tweet(authorName: "redbull fedaisi", handle: "@basat_8", time: "12h", text: "lol oynuyom gun1", avatarColor: .red, replyCount: 25, retweetCount: 12, likeCount: 532, goruntulenmeCount: 765, bookmarkCount: 936),
-        
-        Tweet(authorName: "deniz", handle: "@mopckqw", time: "3h", text: "20 kisi kaldı gelin çabuk", avatarColor: .brown, replyCount: 231, retweetCount: 242, likeCount: 746, goruntulenmeCount: 755, bookmarkCount: 542),
-        
-        Tweet(authorName: "rosa", handle: "@benibisalinyaw_", time: "3m", text: "sonra dedim ki o kim ya abi benim gene çenem düştü ha bak çok saçma konulardan bahsedebilirim", avatarColor: .red, replyCount: 7, retweetCount: 274, likeCount: 27, goruntulenmeCount: 273, bookmarkCount: 956),
-        
-        Tweet(authorName: "melisa", handle: "@kizginliktayim", time: "3h", text: "unbelievable soktayim (dogdugumuzdan beri", avatarColor: .purple, replyCount: 14, retweetCount: 250, likeCount: 924, goruntulenmeCount: 88, bookmarkCount: 956),
-        
-        Tweet(authorName: "Kaira", handle: "@95kayra", time: "44m", text: "ÇİLEK KOKUYORDU", avatarColor: .orange, replyCount: 91, retweetCount: 273, likeCount: 836, goruntulenmeCount: 141, bookmarkCount: 956),
-        
-        Tweet(authorName: "katherine pierce", handle: "@katherinepier72", time: "14h", text: "baba feneri bana salın demis", avatarColor: .cyan, replyCount: 24, retweetCount: 82, likeCount: 123, goruntulenmeCount: 84, bookmarkCount: 123),
-        
-        Tweet(authorName: "gizlisevdam", handle: "@34_psi", time: "34m", text: "NERDE O ALİ BABNIN ÇİFTLİĞİNDEKİLER", avatarColor: .brown, replyCount: 243, retweetCount: 123, likeCount: 95, goruntulenmeCount: 254, bookmarkCount: 521),
-        
-        Tweet(authorName: "Tolga", handle: "@Tolga20382408", time: "2h", text: "'Bir bakmışsın Tolga kuyuda zordadır, bir bakmışsın Tolga gtten veriyordur!'", avatarColor: .teal, replyCount: 364, retweetCount: 231, likeCount: 983, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .indigo, replyCount: 783, retweetCount: 734, likeCount: 925, goruntulenmeCount: 235, bookmarkCount: 956),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .mint, replyCount: 0, retweetCount: 732, likeCount: 825, goruntulenmeCount: 124, bookmarkCount: 623),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .yellow, replyCount: 162, retweetCount: 724, likeCount: 524, goruntulenmeCount: 463, bookmarkCount: 956),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812),
-        
-        Tweet(authorName: "deneme2", handle: "@deemesf", time: "12h", text: "bazı daha uzun bir tweet deneme 1 2 3 adwadawjv deneme fixed size deneme 1 2 3 adwadawjv deneme fixed size deneme", avatarColor: .teal, replyCount: 721, retweetCount: 635, likeCount: 161, goruntulenmeCount: 142, bookmarkCount: 812)
-    ]
     
     @State private var showComposer = false //Sağ alttaki + Buttonu
-    
-    
+
     var body: some View{
-        NavigationStack{
-            
-            ZStack(alignment: .bottomTrailing) {
-                
-                // ---------------------------------
-                //Time
-                // -----------------------------------
-                
-                List{
-                    ForEach(tweets) { tweet in
-                        TweetRow(tweet: tweet).listRowInsets(.init(top:14, leading:16, bottom:14, trailing:16))
+        ZStack(alignment: .leading) {
+
+            // ANA İÇERİK: Navigation + Timeline + Sağ alt buton
+            NavigationStack{
+                ZStack(alignment: .bottomTrailing) {
+                    List{
+                        ForEach(api.posts) { post in
+                            TweetRow(tweet: mapPostToTweet(post))
+                                .listRowInsets(.init(top:14, leading:16, bottom:14, trailing:16))
+                        }
                     }
+                    .listStyle(.plain)
+                    .background(Color(uiColor:.systemGray6))
+
+                    Button {
+                        showComposer = true
+                    } label: {
+                        Image("NewTweetIcon")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(width: 60, height: 60)
+                            .background(Circle().fill(Color.blue))
+                            .shadow(radius: 5, y: 3)
+                    }
+                    .padding(.trailing, 20)
+                    // Tab bar + safe area payı
+                    .padding(.bottom, 65)
                 }
-                .listStyle(.plain).background(Color(uiColor:.systemGray6))
-                
-                
-                // ---------------------------------
-                // Sağ alt + buttonu
-                // -----------------------------------
-                Button {
-                    showComposer = true
-                } label: {
-                    Image("NewTweetIcon")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(.white)
-                        .frame(width: 65, height: 65)
-                        .background(Circle().fill(Color.blue))
-                        .shadow(radius: 5, y: 3)
+
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            withAnimation(.spring()) {
+                                showMenu.toggle()
+                            }
+                        } label: {
+                            profileImageView
+                        }
+                    }
+
+                    ToolbarItem(placement: .principal) {
+                        Image("TwitterLogoBlue")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .padding(.top, 15)
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing){
+                        Image("FeatureStrokeIcon")
+                    }
+                    
                 }
-                .padding(.trailing, 20)
-                .padding(.bottom, 24)
+                .padding(.top, 5)
+
+                // Compose Tweet Sheet (şimdilik basit placeholder)
+                .sheet(isPresented: $showComposer) {
+                    Text("Tweet Composer")
+                        .font(.largeTitle)
+                        .padding()
+                }
             }
-            
-            
-            // ---------------------------------
-            //NAVBAR - sol avatar, ortada kuş, sağda ayar ikonu
-            // -----------------------------------
-            
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Image("ahmet")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 32, height: 64)
-                        .clipShape(Circle())
-                }
-                
-                ToolbarItem(placement: .principal) {
-                    Image("TwitterLogoBlue")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 32, height: 32)
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Image("FeatureStrokeIcon")
-                }
-            }
-            
-            // ---------------------------------
-            //Compose Tweet Sheet (şimdilik basit placeholder)
-            // -----------------------------------
-            .sheet(isPresented: $showComposer) {
-                Text("Tweet Composer")
-                    .font(.largeTitle)
-                    .padding()
+
+            // SIDE MENU + KAPATMA ALANI
+            if showMenu {
+                // Arkadaki karartma
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.spring()) {
+                            showMenu = false
+                        }
+                    }
+
+                // Menü içeriği
+                SideMenuView(
+                    user: auth.currentUser,
+                    onLogout: {
+                        auth.signOut()
+                        withAnimation(.spring()) {
+                            showMenu = false
+                        }
+                    }
+                )
+                .frame(width: 280)
+                .transition(.move(edge: .leading))
             }
         }
+    }
+
+    // Navbar'daki profil foto butonu için helper
+    private var profileImageView: some View {
+        Group {
+            if let urlString = auth.currentUser?.profileImageURL,
+               let url = URL(string: urlString) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure(_):
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                    @unknown default:
+                        Circle()
+                            .fill(Color.gray.opacity(0.3))
+                    }
+                }
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
+            } else {
+                Image("ahmet")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 32, height: 32)
+                    .clipShape(Circle())
+            }
+        }
+    }
+    
+    private func mapPostToTweet(_ post: XTPost) -> Tweet {
+        Tweet(authorName: auth.currentUser?.name ?? "Kullanıcı Adı",
+              handle: "@\(auth.currentUser?.username ?? "Kullanıcı")",
+              time: "",
+              text: post.text,
+              avatarColor: .blue,
+              replyCount: 0,
+              retweetCount: 0,
+              likeCount: 0,
+              goruntulenmeCount: 0,
+              bookmarkCount: 0)
     }
 }
 
 //MARK: - Tweet Row (Her tweet hücresi)
 
 struct TweetRow: View{
-    
     let tweet: Tweet
-    
     var body: some View {
-        
         HStack(alignment: .top, spacing: 12) {
             
             //Avatar
@@ -218,19 +213,14 @@ struct TweetRow: View{
                     .font(.body)
                     .fixedSize(horizontal: false, vertical: true)
                 
-                
                 TweetActions(tweet: tweet)
                     .padding(.top, 4)
-                
             }
         }
-        
     }
 }
 
-// ======================================================
 // MARK: - Alt Buttonlar
-// ======================================================
 
 struct TweetActions: View{
     
@@ -246,11 +236,6 @@ struct TweetActions: View{
             Spacer()
             action("HeartStrokeIcon", tweet.likeCount)
             Spacer()
-            
-            /*
-            action("lines.measurement.horizontal.aligned.bottom", tweet.goruntulenmeCount)
-            Spacer()
-            */
              
             Image("ShareStrokeIcon")
                 .resizable()
@@ -284,13 +269,14 @@ struct TweetActions: View{
     }
 }
 
-//PREVIEW
 #Preview {
+    
+    let auth = XAuthManager()
+    let api = XAPIService()
     HomeView()
+        .environmentObject(XAuthManager())
+        .environmentObject(XAPIService())
 }
-
-
-
 
 
 

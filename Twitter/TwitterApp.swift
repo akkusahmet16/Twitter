@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct TwitterApp: App {
+    
+    @StateObject private var auth = XAuthManager()
+    @StateObject private var api = XAPIService()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(auth)
+                .environmentObject(api)
         }
     }
 }

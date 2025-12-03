@@ -15,16 +15,28 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				XAPI/SecretsExample.swift,
 			);
 			target = 4213A5EE2EDA1AEB00C0CC90 /* Twitter */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		42F95A952EE047B800C79DA5 /* Exceptions for "Twitter" folder in "Copy Bundle Resources" phase from "Twitter" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 4213A5ED2EDA1AEB00C0CC90 /* Resources */;
+			membershipExceptions = (
+				XAPI/SecretsExample.swift,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4213A5F12EDA1AEB00C0CC90 /* Twitter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				4213A6642EDD758100C0CC90 /* Exceptions for "Twitter" folder in "Twitter" target */,
+				42F95A952EE047B800C79DA5 /* Exceptions for "Twitter" folder in "Copy Bundle Resources" phase from "Twitter" target */,
 			);
 			path = Twitter;
 			sourceTree = "<group>";
