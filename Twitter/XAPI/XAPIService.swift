@@ -15,6 +15,8 @@ final class XAPIService: ObservableObject {
     @Published var posts: [XTPost] = []
     @Published var errorMessage: String?
     @Published var isLoading: Bool = false
+    @Published var userById: [String: XTUser] = [:]
+    @Published var mediaByKey: [String: XTMedia] = [:]
     
     private let bearerToken: String
     private var userAccessToken: String?
@@ -105,22 +107,27 @@ final class XAPIService: ObservableObject {
     func fetchHomeTimeline(for userId: String) async {
         guard let token = userAccessToken else {
             self.errorMessage = "Önce kullanıcı girişi yapman lazım."
+            print("Home Time Line: Access Token yok")
             return
         }
         
         let urlString = """
-            https://api.x.com/2/users/\(userId)/timelines/reverse_chronological?max_results=5&tweet.fields=created_at&expansions=author_id&user.fields=username,name
-            """
+        https://api.x.com/2/users/\(userId)/timelines/reverse_chronological?max_results=5&tweet.fields=created_at,attachments,public_metrics,referenced_tweets&expansions=author_id,attachments.media_keys&user.fields=name,username,profile_image_url&media.fields=url,preview_image_url,width,height,type
+        """
+        
+        print("Home timeline isteği URL: \(urlString)")
         await performTimeLineRequest(urlString: urlString, token: token)
     }
     
+    @MainActor
     private func performTimeLineRequest(urlString: String, token: String) async {
-        if isLoading {return}
+        // Aynı anda birden fazla timeline çekme isteğini engeller
+        if isLoading { return }
         isLoading = true
-        defer {isLoading = false}
+        defer { isLoading = false }
         
         guard let url = URL(string: urlString) else {
-            self.errorMessage = "Geeçersiz URL"
+            self.errorMessage = "Geçersiz URL"
             return
         }
         
@@ -128,7 +135,7 @@ final class XAPIService: ObservableObject {
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        do{
+        do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             guard let http = response as? HTTPURLResponse else {
@@ -141,11 +148,34 @@ final class XAPIService: ObservableObject {
                 self.errorMessage = "X API hatası: \(http.statusCode)\n\(txt)"
                 return
             }
-            //Ham JSON'u debug için görmek istersen
-            //print(String(data: data, encoding: .utf8) ?? "")
             
             let decoded = try JSONDecoder().decode(XTUserTimeLineResponse.self, from: data)
+            
+            // POST LISTESİ
             self.posts = decoded.data ?? []
+            
+            // KULLANICI DICTIONARY (author_id → user)
+            if let users = decoded.includes?.users {
+                self.userById = Dictionary(uniqueKeysWithValues:
+                    users.map { ($0.id, $0) }
+                )
+            } else {
+                self.userById = [:]
+            }
+            
+            // MEDYA DICTIONARY (media_key → media)
+            if let media = decoded.includes?.media {
+                self.mediaByKey = Dictionary(uniqueKeysWithValues:
+                    media.map { ($0.media_key, $0) }
+                )
+            } else {
+                self.mediaByKey = [:]
+            }
+            
+            print("➡️ Post sayısı:", posts.count)
+            print("➡️ User sayısı:", userById.count)
+            print("➡️ Media sayısı:", mediaByKey.count)
+            
             self.errorMessage = nil
             
         } catch {
