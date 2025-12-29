@@ -1,0 +1,19 @@
+# Xcode
+.DS_Store
+*/build/
+*.os
+*.xcodeproj/project.xcworkspace
+*.xcodeproj/xcuserdata
+*.playgroundtimeline
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+
+# SECRETS FILES (Important!)
+Secrets.swift
