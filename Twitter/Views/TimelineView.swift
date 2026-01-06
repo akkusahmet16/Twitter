@@ -9,82 +9,118 @@ import SwiftUI
 
 struct TimelineView: View {
     
-    // ViewModel connection
-    // Data management and business logic revolve entirely around the ViewModel.
-    // View only observes the state
     @StateObject private var viewModel = TimelineViewModel()
+    
+    // We are listening for the refresh signal from MainTabView.
+    @Binding var refreshTrigger: Bool
+    
+    // Visibility status of the tweet screen
+    @State private var showNewTweetSheet = false
     
     var body: some View {
         NavigationView {
-            ZStack {
-                // Background color (If necessary)
+            ZStack(alignment: .bottomTrailing) { // Align FAB to the bottom right corner
+                
                 Color.white.ignoresSafeArea()
                 
+                // --- CONTENT MANAGEMENT ---
+                
                 if viewModel.isLoading {
+                    // LOADING
                     ProgressView("Loading Tweets...")
-                } else if let errorMessage = viewModel.errorMessage {
-                    // Error notification screen
+                        .scaleEffect(1.5)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Spread across the screen and center
+                }
+                else if let errorMessage = viewModel.errorMessage {
+                    // Error Screen
                     VStack {
-                        Image(systemName: "exclamationmark.triangle")
+                        Image(systemName: "exclamationmark.triangle.fill")
                             .font(.largeTitle)
                             .foregroundColor(.orange)
-                        Text("An error occurred")
+                        Text("Could not load")
                             .font(.headline)
                         Text(errorMessage)
                             .font(.caption)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        
+                            .foregroundColor(.gray)
                         Button("Try Again") {
-                            Task {
-                                await viewModel.getTweets()
-                            }
+                            triggerRefresh()
                         }
-                        .buttonStyle(.borderedProminent)
+                        .padding(.top, 4)
                     }
-                } else {
-                    // We are displaying the list in a successful state
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                else if viewModel.tweets.isEmpty {
+                    // BLANK SCREEN
+                    VStack(spacing: 20) {
+                        Image(systemName: "bird")
+                            .font(.system(size: 60))
+                            .foregroundColor(.blue.opacity(0.5))
+                        
+                        Text("Flow Empty")
+                            .font(.title2)
+                            .bold()
+                        
+                        Text("Tap the Home icon below to see the tweets.")
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                            .foregroundColor(.gray)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity) // Spread across the screen and center
+                }
+                else {
+                    // LIST (Data Received)
                     ScrollView {
                         LazyVStack(spacing: 0) {
                             ForEach(viewModel.tweets) { tweet in
                                 TweetRowView(tweet: tweet)
-                                // Click actions can be added here
                             }
                         }
                     }
-                    // "Pull to Refresh" feature
                     .refreshable {
                         await viewModel.getTweets()
                     }
                 }
+                
+                // Floating Action Button (FAB) - To be activated in the future
+                /*
+                Button {
+                    showNewTweetSheet = true
+                } label: {
+                    Image(systemName: "plus")
+                    // ... Design codes ...
+                }
+                */
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                // The left and right navbar buttons will be added here (Profile, Settings, etc.)
                 ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(action: {
-                                        // Profil menüsü açılacak
-                                    }) {
-                                        Image(systemName: "person.circle")
-                                    }
-                                }
+                    Image(systemName: "person.circle")
+                        .foregroundColor(.primary)
+                }
             }
-            // MARK: Due to xAPI limitations, the auto-renewal feature is currently disabled.
-            /*
-            // We start pulling the data when the view first opens.
+            // Signal Listener
+            .onChange(of: refreshTrigger) { _ in
+                triggerRefresh()
+            }
+            // AUTO-START: Fetch data when the application opens
             .task {
-                // If the list is empty, fetch the data; if it is full (if you have returned from another page), do not fetch it again.
                 if viewModel.tweets.isEmpty {
+                    print("The application has opened, data is being requested...")
                     await viewModel.getTweets()
                 }
             }
-            */
+        }
+    }
+    
+    private func triggerRefresh() {
+        Task {
+            print("Data retrieval request triggered...")
+            await viewModel.getTweets()
         }
     }
 }
 
 #Preview {
-    TimelineView()
+    TimelineView(refreshTrigger: .constant(false))
 }

@@ -10,6 +10,6 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         // TimelineView has been set as the application entry point.
-        TimelineView()
+        MainTabView()
     }
 }

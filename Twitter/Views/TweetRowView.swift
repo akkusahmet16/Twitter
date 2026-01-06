@@ -17,7 +17,7 @@ struct TweetRowView: View {
             // Profile Picture Area
             // In the actual application, an asynchronous image loader (AsynImage) will be placed here.
             // For now, a placeholder has been used for design integrity.
-            Image(systemName: "person.crcle.fill")
+            Image(systemName: "person.circle.fill")
                 .resizable()
                 .frame(width: 48, height: 48)
                 .foregroundStyle(.gray.opacity(0.5))

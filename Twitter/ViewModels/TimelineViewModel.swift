@@ -1,52 +1,38 @@
-//
-//  TimelineViewModel.swift
-//  Twitter
-//
-//  Created by Akkuş on 29.12.2025.
-//
-
 import Foundation
 import SwiftUI
 import Combine
 
-//@MainActor: Ensures that tasks that update the interface are performed on the main thread.
-//To prevent the UI from freezing or crashing
-
 @MainActor
 class TimelineViewModel: ObservableObject {
     
-    // Data (variables) to be displayed on the screen
-    @Published var tweets: [Tweet] = [] // Tweet List
-    @Published var isLoading: Bool = false // is Loading?
-    @Published var errorMessage: String? = nil // Is there an error message?
+    @Published var tweets: [Tweet] = []
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String? = nil
     
-    // The function that pulls tweets
     func getTweets() async {
-        
-        // Start the loading animation
+        print("🧠 ViewModel: Veri çekme işlemi başladı.")
         isLoading = true
         errorMessage = nil
         
+        // DEFER: Fonksiyon bitince (hata olsa bile) burası çalışır.
+        // Yükleniyor yazısının takılı kalmasını engeller.
+        defer {
+            isLoading = false
+            print("🧠 ViewModel: Yükleme durumu kapatıldı.")
+        }
+        
         do {
-            // FOR TESTING: You need a Twitter User ID here.
-            // In XAPI v2, a numeric ID (like 123456) is used instead of a username (@username).
-            // For now, you can enter Elon Musk's ID or any ID you know here for testing.
-            // If you don't know the ID, the "me" endpoint is different; for now, let's use the ID.
-            // EXAMPLE: NASA's ID: "11348282"
+            // Mock Data olduğu için ID önemli değil ama formalite icabı yazıyoruz.
             let userId = "11348282"
             
-            // We tell the manager, "Go get the data."
             let fetchedTweets = try await APIManager.shared.fetchTweets(userId: userId)
             
-            // We are adding the incoming data to the list.
             self.tweets = fetchedTweets
-        } catch {
-            // If there is an error, we catch the message
-            self.errorMessage = "Tweets Could Not Be Retrieved: \(error.localizedDescription)"
-            print("ViewModel Error: \(error)")
+            print("🧠 ViewModel: \(fetchedTweets.count) adet tweet başarıyla yüklendi.")
             
-            // Process complete, loading icon closed
-            isLoading = false
+        } catch {
+            self.errorMessage = "Hata: \(error.localizedDescription)"
+            print("🧠 ViewModel Hatası: \(error)")
         }
     }
 }

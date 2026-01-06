@@ -1,67 +1,72 @@
-//
-//  APIManager.swift
-//  Twitter
-//
-//  Created by Akkuş on 29.12.2025.
-//
-
 import Foundation
 
 class APIManager {
-    // Singleton: Accessible from anywhere
+    
     static let shared = APIManager()
     
-    // My own error definitions (Cleaner and clearer)
+    // Hata Tanımları
     enum APIError: Error {
-        case invaildURL
-        case invaildResponse
-        case serverError(String) // Carries the error message from the server
+        case invalidURL
+        case invalidResponse
+        case serverError(String)
     }
     
     private init() {}
     
-    // The function that pulls tweets
+    // --- 1. GET TWEET - MOCK DATA MODE---
+    // We are forced to convert fake data because the API does not allow it.
     func fetchTweets(userId: String) async throws -> [Tweet] {
         
-        // MARK: 1. Endpoint: The address for fetching a user's tweets
-        // Note: Due to Elon Musk changing the API, the limits on the Free tier are very strict.
+        print(" Due to Free Tier restrictions, Mock Data is being loaded...")
         
-        let urlString = "https://api.twitter.com/2/users/\(userId)/tweets?tweet.fields=created_at,author_id"
+        // Sahte Tweetler Listesi
+        return [
+            Tweet(id: "1", text: "This tweet was created as a fake due to API restrictions. But the design looks great! 🔥", created_at: "2025-12-31T12:00:00Z", author_id: "1"),
+            Tweet(id: "2", text: "Developing applications with SwiftUI and the MVVM architecture is a lot of fun. The XClone project is moving full steam ahead.", created_at: "2025-12-31T11:45:00Z", author_id: "1"),
+            Tweet(id: "3", text: "Elon Musk may have made the timeline feature paid, but it won't stop Turkish developers. 🚀", created_at: "2025-12-30T09:30:00Z", author_id: "1"),
+            Tweet(id: "4", text: "Don't forget to drink coffee while coding. You'll need it when debugging. ☕️", created_at: "2025-12-29T14:20:00Z", author_id: "1"),
+            Tweet(id: "5", text: "Let's not forget to commit to GitHub. We don't want any regrets later.", created_at: "2025-12-28T16:10:00Z", author_id: "1")
+        ]
+    }
+    
+    // --- 2. POST A TWEET - REAL API MODE ---
+    // This will actually work because the Free Tier allows you to tweet.
+    func sendTweet(text: String) async throws -> Bool {
         
-        guard let url = URL(string: urlString) else {
-            throw APIError.invaildURL
-        }
+        let urlString = "https://api.twitter.com/2/tweets"
         
+        guard let url = URL(string: urlString) else { throw APIError.invalidURL }
         
-        // MARK: 2. Request Preparation
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        // ATTENTION: We are retrieving the password from the Secrets file.
-        request.setValue("Baere \(Secrets.bearerToken)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        
+        // We are using the actual tokens in the Secrets file.
+        // OAUTH 1.0a may be required, but for now we are trying Bearer.
+        // OAUTH 1.0a may be required, but for now we are trying Bearer.
+        request.setValue("Bearer \(Secrets.bearerToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        let body: [String: String] = ["text": text]
         
-        // MARK: 3. Submit Request
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        } catch {
+            print("JSON Error")
+            return false
+        }
+        
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        // Check the response code (200 OK?)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw URLError(.badServerResponse)
+        guard let httpResponse = response as? HTTPURLResponse else { throw APIError.invalidResponse }
+        
+        // 201 Created = Successful
+        if httpResponse.statusCode == 201 {
+            print("✅ Tweet successfully sent! (Real API)")
+            return true
+        } else {
+            let errorBody = String(data: data, encoding: .utf8) ?? "Unknown Error"
+            print("🚨 Tweet Error: \(httpResponse.statusCode) - \(errorBody)")
+            throw APIError.serverError(errorBody)
         }
-        
-        if httpResponse.statusCode != 200 {
-            // If there is an error, print it to the console
-            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown Error"
-            print("API Error: \(httpResponse.statusCode) - \(errorMessage)")
-            throw URLError(.badServerResponse)
-        }
-        
-        
-        // MARK: 4. Converting incoming JSON data to a Swift object (Decoding)
-        let decodedResponse = try JSONDecoder().decode(TwitterResponse.self, from: data )
-        
-        // EIf the data is empty, it returns an empty array.
-        return decodedResponse.data ?? []
-        
     }
 }
