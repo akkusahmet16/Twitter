@@ -10,9 +10,33 @@
 		4275DBAE2F026D550046BCA3 /* Twitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		424BFBD42F0D3D1D0019D9BF /* Exceptions for "Twitter" folder in "Twitter" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SecretsTemplate.txt,
+			);
+			target = 4275DBAD2F026D550046BCA3 /* Twitter */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		424BFBD52F0D3D1D0019D9BF /* Exceptions for "Twitter" folder in "Compile Sources" phase from "Twitter" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 4275DBAA2F026D550046BCA3 /* Sources */;
+			membershipExceptions = (
+				SecretsTemplate.txt,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4275DBB02F026D550046BCA3 /* Twitter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				424BFBD42F0D3D1D0019D9BF /* Exceptions for "Twitter" folder in "Twitter" target */,
+				424BFBD52F0D3D1D0019D9BF /* Exceptions for "Twitter" folder in "Compile Sources" phase from "Twitter" target */,
+			);
 			path = Twitter;
 			sourceTree = "<group>";
 		};
