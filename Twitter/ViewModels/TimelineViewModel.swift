@@ -10,29 +10,28 @@ class TimelineViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
     
     func getTweets() async {
-        print("🧠 ViewModel: Veri çekme işlemi başladı.")
+        print("ViewModel: Data retrieval process has started.")
         isLoading = true
         errorMessage = nil
         
-        // DEFER: Fonksiyon bitince (hata olsa bile) burası çalışır.
-        // Yükleniyor yazısının takılı kalmasını engeller.
+        // DEFER: This runs after the function completes (even if an error occurs).
+        // Prevents the "Loading" message from getting stuck.
         defer {
             isLoading = false
-            print("🧠 ViewModel: Yükleme durumu kapatıldı.")
+            print("ViewModel: The loading status has been closed.")
         }
         
         do {
-            // Mock Data olduğu için ID önemli değil ama formalite icabı yazıyoruz.
             let userId = "11348282"
             
             let fetchedTweets = try await APIManager.shared.fetchTweets(userId: userId)
             
             self.tweets = fetchedTweets
-            print("🧠 ViewModel: \(fetchedTweets.count) adet tweet başarıyla yüklendi.")
+            print("ViewModel: \(fetchedTweets.count) tweets successfully uploaded.")
             
         } catch {
-            self.errorMessage = "Hata: \(error.localizedDescription)"
-            print("🧠 ViewModel Hatası: \(error)")
+            self.errorMessage = "Error: \(error.localizedDescription)"
+            print("ViewModel Error: \(error)")
         }
     }
 }

@@ -9,12 +9,13 @@ import SwiftUI
 
 struct TimelineView: View {
     
+    // Manages the state and business logic for the timeline data.
     @StateObject private var viewModel = TimelineViewModel()
     
-    // We are listening for the refresh signal from MainTabView.
+    // Binding to receive refresh signals from the MainTabView.
     @Binding var refreshTrigger: Bool
     
-    // Visibility status of the tweet screen
+    // Controls the presentation of the New Tweet sheet.
     @State private var showNewTweetSheet = false
     
     var body: some View {
@@ -26,13 +27,13 @@ struct TimelineView: View {
                 // --- CONTENT MANAGEMENT ---
                 
                 if viewModel.isLoading {
-                    // LOADING
+                    // LOADING STATE
                     ProgressView("Loading Tweets...")
                         .scaleEffect(1.5)
                         .frame(maxWidth: .infinity, maxHeight: .infinity) // Spread across the screen and center
                 }
                 else if let errorMessage = viewModel.errorMessage {
-                    // Error Screen
+                    // Error State
                     VStack {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .font(.largeTitle)
@@ -50,7 +51,7 @@ struct TimelineView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 else if viewModel.tweets.isEmpty {
-                    // BLANK SCREEN
+                    // Empty screen
                     VStack(spacing: 20) {
                         Image(systemName: "bird")
                             .font(.system(size: 60))
@@ -81,15 +82,24 @@ struct TimelineView: View {
                     }
                 }
                 
-                // Floating Action Button (FAB) - To be activated in the future
-                /*
+                // Floating Action Button (FAB)
+                // This button triggers the sheet to compose a new tweet.
+                // It utilizes the Real API (Write Access) unlike the read-only timeline.
                 Button {
                     showNewTweetSheet = true
                 } label: {
                     Image(systemName: "plus")
-                    // ... Design codes ...
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(width: 56, height: 56)
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
                 }
-                */
+                .padding()
+                // Ensure the button doesn't move up when the keyboard appears.
+                .ignoresSafeArea(.keyboard, edges: .bottom)
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.inline)
@@ -99,20 +109,26 @@ struct TimelineView: View {
                         .foregroundColor(.primary)
                 }
             }
-            // Signal Listener
+            // Presents the 'NewTweetView' as a modal sheet.
+            .sheet(isPresented: $showNewTweetSheet) {
+                NewTweetView()
+            }
+            
+            // Listens for tab bar taps to trigger a refresh.
             .onChange(of: refreshTrigger) { _ in
                 triggerRefresh()
             }
-            // AUTO-START: Fetch data when the application opens
+            // Automatically fetches mock data when the view appears.
             .task {
                 if viewModel.tweets.isEmpty {
-                    print("The application has opened, data is being requested...")
+                    print("App launched, requesting initial data...")
                     await viewModel.getTweets()
                 }
             }
         }
     }
     
+    // Helper function to initiate the data fetching task.
     private func triggerRefresh() {
         Task {
             print("Data retrieval request triggered...")
