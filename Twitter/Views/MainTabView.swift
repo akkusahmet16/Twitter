@@ -36,28 +36,28 @@ struct MainTabView: View {
             // Trigger ($homeRefreshTrigger) rusting on the underside.
             TimelineView(refreshTrigger: $homeRefreshTrigger)
                 .tabItem {
-                    Image(systemName: selectedTab == 0 ? "house.fill" : "house")
+                    Image(selectedTab == 0 ? "HomeSolidIcon" : "HomeIcon")
                 }
                 .tag(0)
             
             // 3. Tab: Search (Currently empty)
             Text("Search Tab (add will be soon)")
                 .tabItem {
-                    Image(systemName: "magnifyingglass")
+                    Image(selectedTab == 0 ? "SearchSolidIcon" : "SearchIcon")
                 }
                 .tag(1)
             
             // 3. Tab: Notifications ( Currently empty )
             Text("Notifications( will be a soon )")
                 .tabItem {
-                    Image(systemName: selectedTab == 2 ? "bell.fill": "bell")
+                    Image(selectedTab == 2 ? "BellSolidIcon": "BellIcon")
                 }
                 .tag(2)
             
             // 4. Tab: Messages
             Text("Messages ( will be a soon )")
                 .tabItem {
-                    Image(systemName: selectedTab == 3 ? "envelope.fill" : "envelope")
+                    Image(selectedTab == 3 ? "MessageSolidIcon" : "MessageIcon")
                 }
                 .tag(3)
         }

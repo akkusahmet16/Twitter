@@ -21,11 +21,7 @@ struct TimelineView: View {
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomTrailing) { // Align FAB to the bottom right corner
-                
-                Color.white.ignoresSafeArea()
-                
                 // --- CONTENT MANAGEMENT ---
-                
                 if viewModel.isLoading {
                     // LOADING STATE
                     ProgressView("Loading Tweets...")
@@ -53,7 +49,7 @@ struct TimelineView: View {
                 else if viewModel.tweets.isEmpty {
                     // Empty screen
                     VStack(spacing: 20) {
-                        Image(systemName: "bird")
+                        Image("TwitterLogo")
                             .font(.system(size: 60))
                             .foregroundColor(.blue.opacity(0.5))
                         
@@ -61,10 +57,6 @@ struct TimelineView: View {
                             .font(.title2)
                             .bold()
                         
-                        Text("Tap the Home icon below to see the tweets.")
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal)
-                            .foregroundColor(.gray)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity) // Spread across the screen and center
                 }
@@ -88,7 +80,7 @@ struct TimelineView: View {
                 Button {
                     showNewTweetSheet = true
                 } label: {
-                    Image(systemName: "plus")
+                    Image("NewTweetIcon")
                         .font(.title)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
@@ -105,12 +97,12 @@ struct TimelineView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Image(systemName: "person.circle")
+                    Image("ProfileIcon")
                         .foregroundColor(.primary)
                 }
             }
             // Presents the 'NewTweetView' as a modal sheet.
-            .sheet(isPresented: $showNewTweetSheet) {
+            .fullScreenCover(isPresented: $showNewTweetSheet) {
                 NewTweetView()
             }
             

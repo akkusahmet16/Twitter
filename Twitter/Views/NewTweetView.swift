@@ -84,7 +84,6 @@ struct NewTweetView: View {
                     TextEditor(text: $tweetText)
                         .font(.title3)
                         .focused($isFocused)
-                        .opacity(tweetText.isEmpty ? 0.1 : 1)
                         .frame(maxHeight: .infinity)
                         .scrollContentBackground(.hidden)
                 }
@@ -97,10 +96,10 @@ struct NewTweetView: View {
             VStack(spacing: 0) {
                 Divider()
                 HStack(spacing: 20) {
-                    Button {} label: { Image(systemName: "camera").font(.title3) }
-                    Button {} label: { Image(systemName: "video.fill").font(.title3) }
-                    Button {} label: { Image(systemName: "chart.bar.xaxis").font(.title3) }
-                    Button {} label: { Image(systemName: "location").font(.title3) }
+                    Button {} label: { Image("ImageIcon").font(.title3) }
+                    Button {} label: { Image("GifIcon").font(.title3) }
+                    Button {} label: { Image("StatsIcon").font(.title3) }
+                    Button {} label: { Image("LocationIcon").font(.title3) }
                     
                     Spacer()
                     
@@ -119,7 +118,7 @@ struct NewTweetView: View {
                 .foregroundColor(.blue)
                 .padding()
             }
-            .background(Color.white)
+            .background(Color(.systemBackground))
         }
         // View Modifiers
         .onAppear {
