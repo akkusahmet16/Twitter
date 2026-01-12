@@ -8,93 +8,86 @@
 import SwiftUI
 
 struct MainTabView: View {
-    // We are following the selected tab (0: Home, 1: Search, 2: Notifications...))
-    @State private var selectedTab: Int = 0
     
-    // Homepage refresh trigger
-    // Every time this variable changes (true/false), TimelineView will interpret it as a "Refresh" command.
-    @State private var homeRefreshTrigger: Bool = false
+    // Using Enum for safer tab management
+    enum Tab: Int {
+        case home = 0
+        case search = 1
+        case notifications = 2
+        case messages = 3
+    }
     
+    @State private var selectedTab: Tab = .home
+    @State private var homeRefreshTrigger = false
     @State private var showMenu = false
     
-    @GestureState private var dragOffset: CGFloat = 0
-    
-    var body: some View{
-        
-        // ZStack: Layer logic. The application will be at the bottom, the menu at the top.
+    var body: some View {
         ZStack(alignment: .leading) {
             
-            // We are replacing the standard TabView with Binding.
-            // This way, if the user clicks on the already open tab again, we can catch it.
+            // MARK: - Main Content
             TabView(selection: $selectedTab) {
                 
-                // 1. Tab: Timeline
-                // Trigger ($homeRefreshTrigger) rusting on the underside.
+                // 1. Timeline
                 TimelineView(refreshTrigger: $homeRefreshTrigger, showMenu: $showMenu)
                     .tabItem {
-                        Image(selectedTab == 0 ? "HomeSolidIcon" : "HomeIcon")
+                        Image(selectedTab == .home ? "HomeSolidIcon" : "HomeIcon")
                     }
-                    .tag(0)
+                    .tag(Tab.home)
                 
-                // 2. Tab: Search (Currently empty)
-                Text("Search Tab (add will be soon)")
+                // 2. Search
+                Text("Search")
                     .tabItem {
-                        Image(selectedTab == 0 ? "SearchSolidIcon" : "SearchIcon")
+                        Image(selectedTab == .search ? "SearchSolidIcon" : "SearchIcon")
                     }
-                    .tag(1)
+                    .tag(Tab.search)
                 
-                // 3. Tab: Notifications ( Currently empty )
-                Text("Notifications( will be a soon )")
+                // 3. Notifications
+                Text("Notifications")
                     .tabItem {
-                        Image(selectedTab == 2 ? "BellSolidIcon": "BellIcon")
+                        Image(selectedTab == .notifications ? "BellSolidIcon" : "BellIcon")
                     }
-                    .tag(2)
+                    .tag(Tab.notifications)
                 
-                // 4. Tab: Messages
-                Text("Messages ( will be a soon )")
+                // 4. Messages
+                Text("Messages")
                     .tabItem {
-                        Image(selectedTab == 3 ? "MessageSolidIcon" : "MessageIcon")
+                        Image(selectedTab == .messages ? "MessageSolidIcon" : "MessageIcon")
                     }
-                    .tag(3)
+                    .tag(Tab.messages)
             }
-            // Set the TabBar color (optional)
             .accentColor(.blue)
+            .offset(x: showMenu ? UIScreen.main.bounds.width * 0.75 : 0) // Slide effect
+            .disabled(showMenu) // Disable interaction when menu is open
             
-            // When the menu opens, push the background slightly to the right (optional, Twitter does this).
-            .offset(x: showMenu ? UIScreen.main.bounds.width * 0.75 : 0)
-            .disabled(showMenu)  // Do not click on the back button while the menu is open.
-            
-            // 2. LAYER: Darkening Effect (Overlay)
+            // MARK: - Overlay (Dimming Effect)
             if showMenu {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation {
-                            showMenu = false
-                        }
-                    }
+                    .onTapGesture { withAnimation { showMenu = false } }
                     .zIndex(1)
+                    // Swipe to close on overlay
+                    .gesture(dragToCloseGesture)
             }
+            
+            // MARK: - Side Menu (Drawer)
             if showMenu {
                 SideMenuView(showMenu: $showMenu)
                     .transition(.move(edge: .leading))
                     .zIndex(2)
+                    // Swipe to close on menu
+                    .gesture(dragToCloseGesture)
             }
         }
-        .gesture(
-            DragGesture()
-                .onEnded { value in
-                    if value.translation.width < -50 {
-                        withAnimation {
-                            showMenu = false
-                        }
-                    }
-                }
-        )
         .animation(.easeInOut(duration: 0.3), value: showMenu)
     }
+    
+    // Shared Gesture Logic
+    private var dragToCloseGesture: some Gesture {
+        DragGesture()
+            .onEnded { value in
+                if value.translation.width < -50 {
+                    withAnimation { showMenu = false }
+                }
+            }
+    }
 }
-#Preview {
-    MainTabView()
-}
-

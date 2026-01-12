@@ -7,28 +7,29 @@
 
 import Foundation
 
-// The main response pattern returned from the API (Wrapper)
+// MARK: - API Response Wrapper
 struct TwitterResponse: Codable {
     let data: [Tweet]?
 }
 
-// The tweet itself
+// MARK: - Tweet Model
+// Represents a single tweet entity with support for both API and Mock data.
 struct Tweet: Codable, Identifiable {
     let id: String
     let text: String
     let created_at: String
     let author_id: String
     
-    // New dynamic fields for UI
-    // We make them optional sting/ints so if real API doesn't send them, app won't crash.
+    // MARK: - Dynamic UI Properties
+    // Optional fields to handle missing API data gracefully.
     var authorName: String? = "Unknown User"
     var authorUsername: String? = "unknown"
-    var authorAvatar: String? = "person.circle.fill" // Default system icon
+    var authorAvatar: String? = "person.circle.fill"
     
-    // NEW FLAG: Determines if the avatar is an SF Symbol (ture) or an Asset Image (false).
+    // Flag to distinguish between SF Symbols (true) and Asset Images (false)
     var isSystemAvatar: Bool = true
     
-    // Engagement stats
+    // MARK: - Engagement Metrics
     var replyCount: Int = 0
     var retweetCount: Int = 0
     var likeCount: Int = 0

@@ -2,6 +2,8 @@
 //  SideMenuView.swift
 //  Twitter
 //
+//  Created by Akkuş on 12.01.2026.
+//
 
 import SwiftUI
 
@@ -10,28 +12,31 @@ struct SideMenuView: View {
     @Binding var showMenu: Bool
     
     var body: some View {
-        
         GeometryReader { geometry in
             
-            let avatarSize = geometry.size.width * 0.12
+            // Calculate dynamic avatar size (10% of screen width)
+            let avatarSize = geometry.size.width * 0.10
             
             VStack(alignment: .leading) {
-                // MARK: - Header (Avatar & Info)
+                
+                // MARK: - Header
                 VStack(alignment: .leading, spacing: 10) {
                     
-                    // Profile Picture (Mock Data)
+                    // Avatar
                     Image("taklalie60profile")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                     
-                    VStack(alignment: .leading, spacing:  4) {
+                    // User Info
+                    VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 4) {
-                            Text("ʇɐʞlɐlı ǝ60")
-                                .font(.default)
+                            Text("taklalı e60")
+                                .font(.headline)
                                 .foregroundColor(.primary)
-                            Image("BlueTick")
+                            
+                            Image("BlueTick") // Verified Badge
                                 .resizable()
                                 .frame(width: 14, height: 14)
                         }
@@ -41,56 +46,50 @@ struct SideMenuView: View {
                             .foregroundColor(.secondary)
                     }
                     
-                    // Follower Stats
+                    // Stats
                     HStack(spacing: 12) {
-                        HStack(spacing: 4) {
-                            Text("356").bold()
-                            Text("Following").foregroundColor(.secondary)
-                        }
-                        HStack(spacing: 4) {
-                            Text("175").bold()
-                            Text("Followers").foregroundColor(.secondary)
-                        }
+                        StatText(count: "356", label: "Following")
+                        StatText(count: "175", label: "Followers")
                     }
-                    .font(.caption)
                     .padding(.top, 8)
                 }
                 .padding(.horizontal)
-                .padding(.top, geometry.safeAreaInsets.top + 10)
+                .padding(.top, geometry.safeAreaInsets.top + 10) // Dynamic Safe Area
                 
-                
-                // MARK: - Menu Items
-                VStack(alignment: .leading, spacing: 24) {
-                    
-                    VStack(alignment: .leading, spacing: 40) {
-                        MenuRow(icon: "ProfileIcon", title: "Profile")
-                        MenuRow(icon: "ListIcon", title: "Lists")
-                        MenuRow(icon: "TopicIcon", title: "Topics")
-                        MenuRow(icon: "BookmarksIcon", title: "Bookmarks")
-                        MenuRow(icon: "MomentsIcon", title: "Moments")
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                    .padding(.bottom, 5)
-                    
-                    Divider()
-                    
+                // MARK: - Menu List
+                ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
-                        SettingsAndHelpCenter(title: "Settings and privacy")
-                        SettingsAndHelpCenter(title: "Help Center")
+                        
+                        // Main Options
+                        VStack(alignment: .leading, spacing: 32) {
+                            MenuRow(icon: "ProfileIcon", title: "Profile")
+                            MenuRow(icon: "ListIcon", title: "Lists")
+                            MenuRow(icon: "TopicIcon", title: "Topics")
+                            MenuRow(icon: "BookmarksIcon", title: "Bookmarks")
+                            MenuRow(icon: "MomentsIcon", title: "Moments")
+                        }
+                        .padding(.top, 20)
+                        
+                        Divider().padding(.vertical, 10)
+                        
+                        // Footer Options
+                        VStack(alignment: .leading, spacing: 20) {
+                            MenuTextRow(title: "Settings and privacy")
+                            MenuTextRow(title: "Help Center")
+                        }
                     }
                     .padding(.horizontal)
-                    .padding(.top, 5)
                 }
-                .padding(.top)
                 
                 Spacer()
                 
+                // MARK: - Bottom Footer
                 HStack {
-                    Image("Union")
+                    Image("Union") // Theme Icon
                         .font(.title2)
                 }
-                .padding(.bottom, 40)
+                .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 20)
+                .padding(.bottom, 20)
                 .padding(.leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -101,40 +100,38 @@ struct SideMenuView: View {
     }
 }
 
+// MARK: - Helper Components
 struct MenuRow: View {
     let icon: String
     let title: String
     
     var body: some View {
         HStack(spacing: 16) {
-            Image(icon)
-                .font(.title3)
-                .frame(width: 24)
-            Text(title)
-                .font(.headline)
-                .fontWeight(.regular)
-            
+            Image(icon).font(.title3).frame(width: 24)
+            Text(title).font(.headline).fontWeight(.regular)
             Spacer()
-        }
-        .foregroundColor(.primary)
+        }.foregroundColor(.primary)
     }
 }
 
-struct SettingsAndHelpCenter: View {
+struct MenuTextRow: View {
     let title: String
-    
     var body: some View {
-        HStack(spacing: 16) {
-            Text(title)
-                .font(.headline)
-                .fontWeight(.regular)
-            
+        HStack {
+            Text(title).font(.headline).fontWeight(.regular)
             Spacer()
-        }
-        .foregroundColor(.primary)
+        }.foregroundColor(.primary)
     }
 }
 
-#Preview {
-    SideMenuView(showMenu: .constant(true))
+struct StatText: View {
+    let count: String
+    let label: String
+    var body: some View {
+        HStack(spacing: 4) {
+            Text(count)
+                .font(.caption).bold()
+            Text(label).foregroundColor(.secondary).font(.caption)
+        }
+    }
 }

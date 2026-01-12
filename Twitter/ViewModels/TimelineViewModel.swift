@@ -1,3 +1,10 @@
+//
+//  TimelineViewModel.swift
+//  Twitter
+//
+//  Created by Akkuş on 30.12.2025.
+//
+
 import Foundation
 import SwiftUI
 import Combine
@@ -9,28 +16,24 @@ class TimelineViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     
+    // Fetch data asynchronously
     func getTweets() async {
-        print("ViewModel: Data retrieval process has started.")
         isLoading = true
         errorMessage = nil
         
-        // DEFER: This runs after the function completes (even if an error occurs).
-        // Prevents the "Loading" message from getting stuck.
+        // Ensure loading state is reset even if error occurs
         defer {
             isLoading = false
-            print("ViewModel: The loading status has been closed.")
         }
         
         do {
-            let userId = "11348282"
-            
+            let userId = "11348282" // Target User ID
             let fetchedTweets = try await APIManager.shared.fetchTweets(userId: userId)
-            
             self.tweets = fetchedTweets
-            print("ViewModel: \(fetchedTweets.count) tweets successfully uploaded.")
+            print("ViewModel: \(fetchedTweets.count) tweets loaded.")
             
         } catch {
-            self.errorMessage = "Error: \(error.localizedDescription)"
+            self.errorMessage = error.localizedDescription
             print("ViewModel Error: \(error)")
         }
     }
