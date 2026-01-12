@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TweetRowView: View {
-    // This view fetches the data of a single tweet from an external source.
+    // The data source for this row
     let tweet: Tweet
     
     var body: some View {
@@ -16,31 +16,40 @@ struct TweetRowView: View {
             
             HStack(alignment: .top, spacing:12) {
                 
-                // Profile Picture Area
-                // In the actual application, an asynchronous image loader (AsynImage) will be placed here.
-                // For now, a placeholder has been used for design integrity.
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .frame(width: 50, height: 50)
-                    .foregroundStyle(.gray)
-                    .clipShape(Circle())
+                // MARK: - Dynamic Avatar ( Systsem or Asset )
+                // We check the flag to decide how to load the image.
+                if tweet.isSystemAvatar {
+                    // Load SF Symbol
+                    Image(systemName: tweet.authorAvatar ?? "person.circle.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(.gray)
+                        .clipShape(Circle())
+                } else {
+                    // Load from Assets
+                    // Note: Ensure the image name in Mock Data matches your Asset name exactly.
+                    Image(tweet.authorAvatar ?? "")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                }
                 
-                // Content and Title Area
+                // MARK: - Content Area
                 VStack(alignment: .leading, spacing: 4) {
                     
-                    // Title: Name, Username, and Date
+                    // Header: Dynamic Name and Username
                     HStack {
-                        Text("Uesr Name") // The author's name from API will appear here in the future.
+                        Text(tweet.authorName ?? "Unknown User")
                             .font(.headline)
                             .foregroundColor(.primary)
+                            .lineLimit(1)
                         
-                        Text("@kusername") // API'den gelen handle
+                        Text("@\(tweet.authorUsername ?? "unknown")")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+                            .lineLimit(1)
                         
-                        Spacer()
-                        
-                        // Helper functions can be added for date formatting.
                         Text("• 2h")
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -52,18 +61,69 @@ struct TweetRowView: View {
                         .font(.body)
                         .foregroundColor(.primary)
                         .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
+                        // prevents layout crashes
+                        .layoutPriority(1)
                     
-                    // Action Buttons (Reply, Retweet, Like, Share)
-                    // We can split the buttons into subviews to prevent code duplication.
-                    HStack(spacing: 40) {
-                        ActionIcons(icon: "CommentIcon", count: 12)
-                        ActionIcons(icon: "RetweetIcon", count: 5342)
-                        ActionIcons(icon: "HeartIcon", count: 3497654)
-                        ActionIcons(icon: "ShareIcon", count: nil)
+                    
+                    // MARK: - Dynamic Action Buttons
+                    //Now binding the counts to the tweet model.
+                    HStack(spacing: 0) {
+                        
+                        // 1. Reply
+                        HStack(spacing: 4) {
+                            Image("CommentIcon")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                            
+                            // Dynamic Count
+                            Text(tweet.replyCount > 0 ? tweet.replyCount.formatCompact() : "")
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack(spacing: 4) {
+                            Image("RetweetIcon")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                            Text(tweet.retweetCount > 0 ? tweet.retweetCount.formatCompact() : "")
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack(spacing: 4) {
+                            Image("HeartIcon")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                            Text(tweet.likeCount > 0 ? tweet.likeCount.formatCompact() : "")
+                                .font(.caption)
+                                .lineLimit(1)
+                        }
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack(spacing: 4) {
+                            Image("ShareIcon")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 18, height: 18)
+                        }
+                        .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
                     }
                     .padding(.top, 8)
-                    padding(.trailing, 16)
+                    .padding(.trailing, 16)
                 }
             }
         }
@@ -75,31 +135,7 @@ struct TweetRowView: View {
     }
 }
 
-// MARK: - Helper View for Action Icons
-struct ActionIcons: View {
-    var icon: String
-    var count: Int?
-    
-    var body: some View {
-        HStack(spacing: 4) {
-            Image(icon)
-                .font(.subheadline)
-            
-            if let count = count {
-                Text(count.formatCompact()) // Using the custom extension
-                    .font(.caption)
-                    .lineLimit(1)
-            }
-        }
-        .foregroundColor(.secondary) // Icons are gray by default
-        // CRITICAL: This ensure each button takes up equal width (25% each)
-        // preventing layout ahifts when numbers get larger.
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-// MARK: - Integer Extension for Compact Formatting
-// Converts raw numbers into readable formats like 1.2K or 3.5M.
+// MARK: - Integer Extension
 extension Int {
     func formatCompact() -> String {
         let number = Double(self)
@@ -107,7 +143,7 @@ extension Int {
         let million = number / 1000000
         
         if million >= 1.0 {
-            return String(format:"%.1fM", million)
+            return String(format: "%.1fM", million)
         } else if thousand >= 1.0 {
             return String(format: "%.1fK", thousand)
         } else {
@@ -117,14 +153,19 @@ extension Int {
 }
 
 
+
 // Design Preview
 // We are testing how the interface looks with mock data.
-#Preview {
-    VStack {
-        // Example 1: Standard Tweet
-        TweetRowView(tweet: Tweet(id: "1", text: "Testing the layout stability. Even with large numbers, the buttons should remain aligned.", created_at: "2025", author_id: "1"))
-        
-        // Example 2: Checking alignment consistency
-        TweetRowView(tweet: Tweet(id: "2", text: "Short tweet.", created_at: "2025", author_id: "1"))
-    }
-}
+/*
+ #Preview {
+ VStack {
+ // Example 1: Standard Tweet
+ TweetRowView(tweet: Tweet(id: "1", text: "Testing the layout stability. Even with large numbers, the buttons should remain aligned.", created_at: "2025", author_id: "1"))
+ 
+ // Example 2: Checking alignment consistency
+ TweetRowView(tweet: Tweet(id: "2", text: "Short tweet.", created_at: "2025", author_id: "1"))
+ }
+ }
+ */
+
+

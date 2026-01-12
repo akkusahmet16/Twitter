@@ -57,9 +57,53 @@ class APIManager {
     /// Returns a list of dummy tweets to simulate a populated feed when the API is unavailable.
     private func generateMockTweets() -> [Tweet] {
         return [
-            Tweet(id: "1", text: "This tweet is displayed via Mock Data due to API limits. But the tweet you are about to post will be REAL! 😎", created_at: "2025-01-08T10:00:00Z", author_id: "1"),
-            Tweet(id: "2", text: "Building an X Clone with SwiftUI is more fun than I expected.", created_at: "2025-01-08T09:30:00Z", author_id: "1"),
-            Tweet(id: "3", text: "Testing the timeline fallback mechanism...", created_at: "2025-01-07T12:00:00Z", author_id: "1")
+            Tweet(
+                id: UUID().uuidString,
+                text: "Sende yargılanıcaksın Elon Musk",
+                created_at: "2025-01-08T10:00:00Z",
+                author_id: "1",
+                authorName: "Taklalı e60",
+                authorUsername: "taklalie60",
+                authorAvatar: "taklalie60profile",
+                isSystemAvatar: false,
+                replyCount: 32,
+                retweetCount: 12,
+                likeCount: 63214
+            ),
+            Tweet(
+                id: UUID().uuidString,
+                text: "Why is fixing layout loops in LazyVStack so satisfying?",
+                created_at: "2025-01-07T12:00:00Z",
+                author_id: "2",
+                authorName: "Sarah Conor",
+                authorUsername: "sarah_c",
+                authorAvatar: "person.circle.fill",
+                replyCount: 21,
+                retweetCount: 51,
+                likeCount: 849
+            ),
+            Tweet(
+                id: UUID().uuidString,
+                text: "Mock data is a lifesaver when the API rate limit hits hard.",
+                created_at: "2025-01-08T09:30:00Z",
+                author_id: "3",
+                authorName: "Tech Insider",
+                authorUsername: "tech_insider",
+                replyCount: 102,
+                retweetCount: 850,
+                likeCount: 5400
+            ),
+            Tweet(
+                id: UUID().uuidString,
+                text: "Hello World! This is a test tweet to check the responsive design.",
+                created_at: "2025-01-07T11:00:00Z",
+                author_id: "4",
+                authorName: "John Doe",
+                authorUsername: "johndoe",
+                replyCount: 0,
+                retweetCount: 1,
+                likeCount: 4
+            ),
         ]
     }
     

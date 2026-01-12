@@ -15,6 +15,8 @@ struct TimelineView: View {
     // Binding to receive refresh signals from the MainTabView.
     @Binding var refreshTrigger: Bool
     
+    @Binding var showMenu: Bool
+    
     // Controls the presentation of the New Tweet sheet.
     @State private var showNewTweetSheet = false
     
@@ -93,12 +95,45 @@ struct TimelineView: View {
                 // Ensure the button doesn't move up when the keyboard appears.
                 .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-            .navigationTitle("Home")
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
+            
+            // MARK: - Custom ToolBar
             .toolbar {
+                // 1. LEFT: Profile Picture
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Image("ProfileIcon")
-                        .foregroundColor(.primary)
+                    Button {
+                        withAnimation {
+                            showMenu.toggle()
+                        }
+                        print("profile tap")
+                    } label: {
+                        Image("taklalie60profile")
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .clipShape(Circle())
+                            .foregroundColor(.primary)
+                    }
+                }
+                
+                // 2. MIDDLE: Twitter Logo (this is the main part)
+                ToolbarItem(placement: .principal) {
+                    Image("TwitterLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                }
+                
+                // 3. RIGHT: Features Icon
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        print("Features tap")
+                    } label: {
+                        Image("FeatureIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                    }
                 }
             }
             // Presents the 'NewTweetView' as a modal sheet.
@@ -127,8 +162,4 @@ struct TimelineView: View {
             await viewModel.getTweets()
         }
     }
-}
-
-#Preview {
-    TimelineView(refreshTrigger: .constant(false))
 }
