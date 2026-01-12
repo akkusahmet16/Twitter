@@ -17,10 +17,7 @@ struct MainTabView: View {
     
     @State private var showMenu = false
     
-    init() {
-        UITabBar.appearance().backgroundColor = UIColor.systemBackground
-        UITabBar.appearance().unselectedItemTintColor = UIColor.gray
-    }
+    @GestureState private var dragOffset: CGFloat = 0
     
     var body: some View{
         
@@ -84,6 +81,16 @@ struct MainTabView: View {
                     .zIndex(2)
             }
         }
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.width < -50 {
+                        withAnimation {
+                            showMenu = false
+                        }
+                    }
+                }
+        )
         .animation(.easeInOut(duration: 0.3), value: showMenu)
     }
 }
