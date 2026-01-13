@@ -2,14 +2,17 @@
 //  SideMenuView.swift
 //  Twitter
 //
-//  Created by Akkuş on 12.01.2026.
-//
 
 import SwiftUI
 
 struct SideMenuView: View {
     
+    // MARK: - Bindings
+    // Controls the visibility of this menu
     @Binding var showMenu: Bool
+    
+    // Controls the presentation of the Profile View in the parent view
+    @Binding var showProfile: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -32,7 +35,7 @@ struct SideMenuView: View {
                     // User Info
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 4) {
-                            Text("taklalı e60")
+                            Text("ʇɐʞlɐlı ǝ60")
                                 .font(.headline)
                                 .foregroundColor(.primary)
                             
@@ -62,7 +65,14 @@ struct SideMenuView: View {
                         
                         // Main Options
                         VStack(alignment: .leading, spacing: 32) {
-                            MenuRow(icon: "ProfileIcon", title: "Profile")
+                            
+                            Button {
+                                withAnimation{ showMenu = false }
+                                showProfile = true
+                            } label: {
+                                MenuRow(icon: "ProfileIcon", title: "Profile")
+                            }
+                            
                             MenuRow(icon: "ListIcon", title: "Lists")
                             MenuRow(icon: "TopicIcon", title: "Topics")
                             MenuRow(icon: "BookmarksIcon", title: "Bookmarks")
@@ -89,7 +99,7 @@ struct SideMenuView: View {
                         .font(.title2)
                 }
                 .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 20)
-                .padding(.bottom, 20)
+                .padding(.bottom, 30)
                 .padding(.leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

@@ -67,7 +67,15 @@ struct TimelineView: View {
                     ScrollView {
                         LazyVStack(spacing: 0) {
                             ForEach(viewModel.tweets) { tweet in
-                                TweetRowView(tweet: tweet)
+                                // 1. Wrap the row in NavigationLink
+                                NavigationLink {
+                                TweetDetailView(tweet: tweet)
+                                } label: {
+                                    TweetRowView(tweet: tweet)
+                                }
+                                // 2. Apply Plain Button Style
+                                // This prevents the text from turning blue and removes the list selection effect.
+                                .buttonStyle(.plain)
                             }
                         }
                     }
@@ -86,7 +94,7 @@ struct TimelineView: View {
                         .font(.title)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
-                        .frame(width: 56, height: 56)
+                        .frame(width: 70, height: 70)
                         .background(Color.blue)
                         .clipShape(Circle())
                         .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)

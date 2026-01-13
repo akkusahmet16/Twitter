@@ -19,7 +19,12 @@ struct MainTabView: View {
     
     @State private var selectedTab: Tab = .home
     @State private var homeRefreshTrigger = false
+    
+    // State to control the sid emenu visibility
     @State private var showMenu = false
+    
+    // State to control the Profile View presentation
+    @State private var showProfile = false
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -71,7 +76,7 @@ struct MainTabView: View {
             
             // MARK: - Side Menu (Drawer)
             if showMenu {
-                SideMenuView(showMenu: $showMenu)
+                SideMenuView(showMenu: $showMenu, showProfile: $showProfile)
                     .transition(.move(edge: .leading))
                     .zIndex(2)
                     // Swipe to close on menu
@@ -79,6 +84,11 @@ struct MainTabView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: showMenu)
+        // Presents the ProfileView full screen when triggered
+        .fullScreenCover(isPresented: $showProfile) {
+            ProfileView()
+        }
+        
     }
     
     // Shared Gesture Logic

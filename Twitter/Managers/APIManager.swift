@@ -103,7 +103,7 @@ class APIManager {
                 text: "Sende yargılanacaksın Elon Musk!",
                 created_at: "2025-01-08T10:00:00Z",
                 author_id: "1",
-                authorName: "Taklalı e60",
+                authorName: "ʇɐʞlɐlı ǝ60",
                 authorUsername: "taklalie60",
                 authorAvatar: "taklalie60profile",
                 isSystemAvatar: false, // Asset Image

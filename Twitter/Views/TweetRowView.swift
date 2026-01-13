@@ -11,67 +11,69 @@ struct TweetRowView: View {
     let tweet: Tweet
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            
-            HStack(alignment: .top, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 10) {
                 
-                // MARK: - Avatar
-                if tweet.isSystemAvatar {
-                    Image(systemName: tweet.authorAvatar ?? "person.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(.gray)
-                        .clipShape(Circle())
-                } else {
-                    Image(tweet.authorAvatar ?? "")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                }
-                
-                // MARK: - Content
-                VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .top, spacing: 12) {
                     
-                    // Header
-                    HStack {
-                        Text(tweet.authorName ?? "Unknown")
-                            .font(.headline)
-                            .lineLimit(1)
-                        
-                        Text("@\(tweet.authorUsername ?? "unknown")")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                        
-                        Text("• 2h")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                    // MARK: - Avatar
+                    if tweet.isSystemAvatar {
+                        Image(systemName: tweet.authorAvatar ?? "person.circle.fill")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(.gray)
+                            .clipShape(Circle())
+                    } else {
+                        Image(tweet.authorAvatar ?? "")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
                     }
                     
-                    // Tweet Text
-                    Text(tweet.text)
-                        .font(.body)
-                        .multilineTextAlignment(.leading)
-                        .layoutPriority(1) // Prevents layout loop crashes
-                    
-                    // MARK: - Action Buttons
-                    // Refactored into a reusable component to reduce code duplication
-                    HStack(spacing: 0) {
-                        TweetActionButton(icon: "CommentIcon", text: tweet.replyCount > 0 ? tweet.replyCount.formatCompact() : nil)
-                        TweetActionButton(icon: "RetweetIcon", text: tweet.retweetCount > 0 ? tweet.retweetCount.formatCompact() : nil)
-                        TweetActionButton(icon: "HeartIcon", text: tweet.likeCount > 0 ? tweet.likeCount.formatCompact() : nil)
-                        TweetActionButton(icon: "ShareIcon", text: nil)
+                    // MARK: - Content
+                    VStack(alignment: .leading, spacing: 4) {
+                        
+                        // Header
+                        HStack {
+                            Text(tweet.authorName ?? "Unknown")
+                                .font(.headline)
+                                .lineLimit(1)
+                            
+                            Text("@\(tweet.authorUsername ?? "unknown")")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                            
+                            Text("• 2h")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        // Tweet Text
+                        Text(tweet.text)
+                            .font(.body)
+                            .multilineTextAlignment(.leading)
+                            .layoutPriority(1) // Prevents layout loop crashes
+                        
+                        // MARK: - Action Buttons
+                        // Refactored into a reusable component to reduce code duplication
+                        HStack(spacing: 0) {
+                            TweetActionButton(icon: "CommentIcon", text: tweet.replyCount > 0 ? tweet.replyCount.formatCompact() : nil)
+                            TweetActionButton(icon: "RetweetIcon", text: tweet.retweetCount > 0 ? tweet.retweetCount.formatCompact() : nil)
+                            TweetActionButton(icon: "HeartIcon", text: tweet.likeCount > 0 ? tweet.likeCount.formatCompact() : nil)
+                            TweetActionButton(icon: "ShareIcon", text: nil)
+                        }
+                        .padding(.top, 8)
+                        .padding(.trailing, 16)
                     }
-                    .padding(.top, 8)
-                    .padding(.trailing, 16)
                 }
             }
+            .padding()
+            
+            Divider()
         }
-        .padding()
         .background(Color(.systemBackground))
-        
-        Divider()
     }
 }
 
