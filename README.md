@@ -1,36 +1,75 @@
-# 🐦 XClone (SwiftUI Edition)
+# 🐦 X (Twitter) Clone - SwiftUI
 
-A native iOS Twitter (X) clone built with **SwiftUI** and **MVVM** architecture. This project demonstrates modern iOS development practices, networking with Async/Await, and handling real-world API limitations creatively.
+[![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg?style=flat&logo=swift)](https://developer.apple.com/swift/)
+[![Platform](https://img.shields.io/badge/Platform-iOS_16.0+-lightgrey.svg?style=flat&logo=apple)](https://developer.apple.com/ios/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](LICENSE)
 
-## 🚀 Project Overview
-This app mimics the core functionality of the X mobile app. The main goal is to build a scalable, clean, and maintainable codebase using the latest Swift features.
+A high-fidelity clone of the **X (formerly Twitter)** iOS application, built entirely with **SwiftUI**. This project demonstrates modern iOS development practices, including **MVVM architecture**, **Async/Await networking**, complex UI animations, and local data persistence.
 
-**Note on Data Source:**
-Due to the recent X API v2 limitations (Free Tier does not allow "Read" access to Timelines), the app utilizes a **Custom Mock Data Engine** for fetching tweets. However, the "Post Tweet" feature is designed to work with the **Real Live API**.
-
-## 🎯 Goals & Features
-
-### ✅ Completed / In Progress
-- **MVVM Architecture:** Clean separation of concerns (Model - View - ViewModel).
-- **Network Layer:** A robust `APIManager` handling Generic requests, decoding, and error management.
-- **Async/Await:** Modern concurrency for smooth data fetching.
-- **Smart Fallback System:** Automatically switches to Mock Data when API limits (401/403) are detected.
-- **UI Design:** Custom `TweetRow` and `Timeline` views matching the original design language.
-
-### 🔜 To Be Implemented
-- [ ] **Real Tweet Posting:** Connecting the FAB (Floating Action Button) to the `POST /2/tweets` endpoint.
-- [ ] **Authentication:** OAuth 2.0 integration.
-- [ ] **Search & Explore:** Querying users and hashtags.
-- [ ] **Profile Page:** Fetching user details (Bio, Followers, etc.).
-- [ ] **Media Support:** Uploading images with tweets.
-
-## 🛠 Tech Stack
-* **Language:** Swift 5
-* **UI Framework:** SwiftUI
-* **Architecture:** MVVM
-* **Concurrency:** Swift Concurrency (Async/Await)
-* **Versioning:** Git
+The app features a hybrid data approach: it connects to the real Twitter API for some features while using realistic mock data for premium-tier restricted features (like DM & Notifications).
 
 ---
 
-*This project is for educational purposes and is not affiliated with X Corp.*
+## 📸 Screenshots
+
+| Home Timeline | Side Menu | Profile View |
+|:---:|:---:|:---:|
+| <img src="Screenshots/home.png" width="250"> | <img src="Screenshots/menu.png" width="250"> | <img src="Screenshots/profile.png" width="250"> |
+
+| Direct Messages | Chat Interface | New Tweet |
+|:---:|:---:|:---:|
+| <img src="Screenshots/messages.png" width="250"> | <img src="Screenshots/chat.png" width="250"> | <img src="Screenshots/compose.png" width="250"> |
+
+---
+
+## 🚀 Key Features
+
+### 📱 User Interface (UI) & UX
+* **Custom Side Menu (Drawer):** Fully animated side menu with gesture support. Swipe from the left edge or tap the overlay to close, just like the native app.
+* **Parallax Profile Header:** Dynamic sticky header animation on the profile page using `GeometryReader`.
+* **Sliding Filter Bar:** Smooth `MatchedGeometryEffect` animations for switching between Tweets, Replies, and Media tabs.
+* **Dark/Light Mode:** Full support for system-wide appearance settings.
+
+### 🏗 Architecture & Logic
+* **MVVM Pattern:** Clean separation of concerns with distinct Views, ViewModels, and Models.
+* **Networking:** Hybrid `APIManager` that supports both real API calls and fallback Mock Data generation.
+* **Async/Await:** Modern concurrency handling for fetching tweets.
+* **Local Persistence:** User-generated tweets are saved locally using `UserDefaults` and merged with API data upon app launch.
+* **Chat System:** A realistic messaging interface with different bubble styles for the sender/receiver and auto-scrolling logic.
+
+---
+
+## 🛠 Tech Stack
+
+* **Language:** Swift 5
+* **Framework:** SwiftUI
+* **Networking:** URLSession (Native)
+* **Authentication:** OAuth 1.0a (Custom Implementation)
+* **Storage:** UserDefaults (Local Persistence)
+* **Version Control:** Git & GitHub
+
+---
+
+## 📂 Project Structure
+
+```text
+Twitter/
+├── Managers/
+│   ├── APIManager.swift       # Network Logic (Real + Mock)
+│   └── OAuth.swift            # Authentication Helper
+├── Models/
+│   ├── Tweet.swift            # Data Model
+│   └── Message.swift          # Chat Data Model
+├── ViewModels/
+│   └── TimelineViewModel.swift# Logic for Home Feed
+├── Views/
+│   ├── MainTabView.swift      # Tab Bar Navigation
+│   ├── HomeTimelineView.swift # Main Feed
+│   ├── SideMenuView.swift     # Custom Drawer
+│   ├── ProfileView.swift      # Parallax Profile
+│   ├── NewTweetView.swift     # Compose Sheet
+│   ├── ChatView.swift         # Messaging UI
+│   └── ... (Other Views)
+├── ContentView.swift      # Root View
+├── TwitterApp.swift       # Entry Point
+└── Assets.xcassets            # Icons & Images
