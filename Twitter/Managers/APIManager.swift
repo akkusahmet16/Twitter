@@ -46,17 +46,17 @@ class APIManager {
             if let httpResponse = response as? HTTPURLResponse {
                 // Fallback on 401 (Unauthorized) or 429 (Too Many Requests)
                 if httpResponse.statusCode != 200 {
-                    print("⚠️ API Limit/Error (Code: \(httpResponse.statusCode)). Switching to Mock Data.")
+                    print("API Limit/Error (Code: \(httpResponse.statusCode)). Switching to Mock Data.")
                     return generateMockTweets()
                 }
             }
             
             let decodedResponse = try JSONDecoder().decode(TwitterResponse.self, from: data)
-            print("✅ Success: Real API data received!")
+            print("Success: Real API data received!")
             return decodedResponse.data ?? generateMockTweets()
             
         } catch {
-            print("❌ Network Error: \(error). Returning Mock Data.")
+            print("Network Error: \(error). Returning Mock Data.")
             return generateMockTweets()
         }
     }

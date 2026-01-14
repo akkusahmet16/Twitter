@@ -22,6 +22,9 @@ struct NewTweetView: View {
     // Focus state for the keyboard
     @FocusState private var isFocused: Bool
     
+    // We observe the same ViewModel from the parent
+    @ObservedObject var viewModel: TimelineViewModel
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -144,6 +147,7 @@ struct NewTweetView: View {
                 let success = try await APIManager.shared.sendTweet(text: tweetText)
                 
                 if success {
+                    viewModel.addLocalTweet(text: tweetText)
                     dismiss() // Corrected: Added parenthesis to call the function
                 }
             } catch {
@@ -155,6 +159,3 @@ struct NewTweetView: View {
     }
 }
 
-#Preview {
-    NewTweetView()
-}

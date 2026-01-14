@@ -40,21 +40,21 @@ struct MainTabView: View {
                     .tag(Tab.home)
                 
                 // 2. Search
-                Text("Search")
+                SearchView()
                     .tabItem {
                         Image(selectedTab == .search ? "SearchSolidIcon" : "SearchIcon")
                     }
                     .tag(Tab.search)
                 
                 // 3. Notifications
-                Text("Notifications")
+                NotificationsView()
                     .tabItem {
                         Image(selectedTab == .notifications ? "BellSolidIcon" : "BellIcon")
                     }
                     .tag(Tab.notifications)
                 
                 // 4. Messages
-                Text("Messages")
+                MessageView()
                     .tabItem {
                         Image(selectedTab == .messages ? "MessageSolidIcon" : "MessageIcon")
                     }

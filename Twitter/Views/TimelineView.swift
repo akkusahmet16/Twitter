@@ -146,7 +146,7 @@ struct TimelineView: View {
             }
             // Presents the 'NewTweetView' as a modal sheet.
             .fullScreenCover(isPresented: $showNewTweetSheet) {
-                NewTweetView()
+                NewTweetView(viewModel: viewModel)
             }
             
             // Listens for tab bar taps to trigger a refresh.
